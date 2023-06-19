@@ -1,26 +1,35 @@
-const githubQuery = (pageCount, queryString )=>{
+const githubQuery = (pageCount, queryString, paginationKeyword, paginationString )=>{
     return {
     query: `
-      {
+    {
         viewer {
-            name
-          }
-          search(query: " ${queryString}user:Ayub-Ian sort:updated-desc", type: REPOSITORY, first:${pageCount}) {
-            repositoryCount
-              nodes {
-                ... on Repository {
-                  name
-                  description
-                  id
-                  url
-                  viewerSubscription
-                  licenseInfo {
-                    spdxId
-                  }
+          name
+        }
+        search(query: "${queryString} user:Ayub-Ian sort:updated-desc", type: REPOSITORY, ${paginationKeyword}: ${pageCount}, ${paginationString}) {
+          repositoryCount
+          edges {
+            cursor
+            node {
+              ... on Repository {
+                name
+                description
+                id
+                url
+                viewerSubscription
+                licenseInfo {
+                  spdxId
                 }
               }
             }
-      }
+          }
+          pageInfo {
+            startCursor
+            endCursor
+            hasNextPage
+            hasPreviousPage
+          }
+        }
+      }  
     `,
 }
   };
